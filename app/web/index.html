@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Harvest Hub - 配置管理中心</title>
+  <link rel="stylesheet" href="/web/style.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">🍀</div>
+        <div>
+          <div class="title">Job Harvest Hub</div>
+          <div class="sub">配置管理中心</div>
+        </div>
+      </div>
+      <div class="health">
+        <span id="healthDot" class="dot"></span>
+        <span id="healthText">检查服务中...</span>
+      </div>
+
+      <div class="menu-title">平台配置</div>
+      <a class="menu-item active" data-platform="boss">Boss直聘</a>
+      <a class="menu-item" data-platform="liepin">猎聘</a>
+      <a class="menu-item" data-platform="zhilian">智联招聘</a>
+    </aside>
+
+    <main class="content">
+      <div class="page-header">
+        <div class="header-left">
+          <div class="icon-badge">💼</div>
+          <div>
+            <div id="pageTitle" class="header-title">Boss直聘配置</div>
+            <div class="header-sub">平台配置中心</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="btnLogin" class="btn btn-light">登录并保存Cookie</button>
+          <button id="btnClearCookie" class="btn btn-light">清空Cookie</button>
+          <button id="btnClearJobs" class="btn btn-danger">清空岗位数据</button>
+          <button id="btnSaveConfig" class="btn btn-primary">保存配置</button>
+          <button id="btnRefreshStatus" class="btn btn-light">刷新状态</button>
+          <button id="btnStart" class="btn btn-success">开始任务</button>
+          <button id="btnStop" class="btn btn-danger">停止任务</button>
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="panel-head tabs-head">
+          <div class="tab-btn active" data-tab="configTab">配置</div>
+          <div class="tab-btn" data-tab="analysisTab">分析</div>
+        </div>
+
+        <div id="configTab" class="tab-pane active">
+          <div class="form-grid">
+          <div class="field">
+            <label for="keyword">关键词（必填）</label>
+            <input id="keyword" placeholder="例如：Python, Java, 测试开发" />
+          </div>
+          <div class="field">
+            <label for="citySelect">城市编码</label>
+            <select id="citySelect" aria-label="城市编码选项"></select>
+            <input id="cityCode" placeholder="自定义城市编码" />
+          </div>
+          <div class="field">
+            <label for="salarySelect">薪资过滤编码（可选）</label>
+            <select id="salarySelect" aria-label="薪资过滤编码选项"></select>
+            <input id="salary" placeholder="自定义薪资编码" />
+          </div>
+          <div class="field">
+            <label for="extraQuery">附加查询参数（KEY=VAL，逗号分隔）</label>
+            <input id="extraQuery" placeholder="例如：experience=108,degree=209" />
+          </div>
+          <div class="field">
+            <label for="maxPages">最大页数</label>
+            <input id="maxPages" type="number" min="1" max="200" value="30" />
+          </div>
+          <div class="field">
+            <label for="stepWaitSec">统一等待秒数</label>
+            <input id="stepWaitSec" type="number" min="0" max="5" step="0.1" value="0.2" />
+          </div>
+          <div class="inline-check">
+            <input id="headless" type="checkbox" />
+            <label for="headless">无头模式（Headless）</label>
+          </div>
+          <div class="inline-check">
+            <input id="saveRaw" type="checkbox" />
+            <label for="saveRaw">保存原始 JSON</label>
+          </div>
+        </div>
+        <div class="platform-sections">
+          <div id="sec-boss" class="platform-section">
+            <div class="sec-title">Boss专属字段</div>
+            <div class="chip-list">
+              <span class="chip">industry=行业编码</span>
+              <span class="chip">experience=经验编码</span>
+              <span class="chip">degree=学历编码</span>
+              <span class="chip">jobType=职位类型编码</span>
+            </div>
+            <div class="inline-fields">
+              <input id="bossIndustry" placeholder="industry 编码" />
+              <input id="bossExperience" placeholder="experience 编码" />
+              <input id="bossDegree" placeholder="degree 编码" />
+              <input id="bossJobType" placeholder="jobType 编码" />
+            </div>
+          </div>
+          <div id="sec-liepin" class="platform-section is-hidden">
+            <div class="sec-title">猎聘专属字段</div>
+            <div class="chip-list">
+              <span class="chip">city/dq=城市编码</span>
+              <span class="chip">salary=薪资编码</span>
+              <span class="chip">key=关键词</span>
+            </div>
+            <div class="inline-fields">
+              <input id="liepinDq" placeholder="dq 编码（可选）" />
+            </div>
+          </div>
+          <div id="sec-zhilian" class="platform-section is-hidden">
+            <div class="sec-title">智联专属字段</div>
+            <div class="chip-list">
+              <span class="chip">jl=城市编码</span>
+              <span class="chip">sl=薪资编码</span>
+              <span class="chip">p=页码</span>
+            </div>
+          </div>
+        </div>
+        <div class="panel-head panel-head-top">任务状态</div>
+        <div class="search-row">
+          <input id="statusText" readonly aria-label="任务状态" title="任务状态" />
+        </div>
+        <div class="search-row">
+          <input id="progressText" readonly placeholder="实时进度将显示在这里" />
+        </div>
+        <div class="progress-log-wrap">
+          <textarea id="progressLog" rows="6" readonly aria-label="进度日志" title="进度日志"></textarea>
+        </div>
+        </div>
+
+        <div id="analysisTab" class="tab-pane">
+          <div class="stats-cards">
+            <div class="stats-card">
+              <div class="k">岗位总数</div>
+              <div id="statTotal" class="v">0</div>
+            </div>
+            <div class="stats-card">
+              <div class="k">公司去重数</div>
+              <div id="statCompanies" class="v">0</div>
+            </div>
+            <div class="stats-card">
+              <div class="k">当前平台</div>
+              <div id="statPlatform" class="v">boss</div>
+            </div>
+          </div>
+          <div class="analysis-grid">
+            <div class="mini-panel">
+              <div class="mini-title">Top 公司</div>
+              <ul id="topCompanies" class="top-list"></ul>
+            </div>
+            <div class="mini-panel">
+              <div class="mini-title">Top 地点</div>
+              <ul id="topLocations" class="top-list"></ul>
+            </div>
+          </div>
+          <div class="charts-grid">
+            <div class="mini-panel">
+              <div class="mini-title">经验分布</div>
+              <canvas id="expChart" width="520" height="220"></canvas>
+            </div>
+            <div class="mini-panel">
+              <div class="mini-title">学历分布</div>
+              <canvas id="degreeChart" width="520" height="220"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">岗位列表</div>
+        <div class="search-row">
+          <input id="searchKeyword" placeholder="按关键词/岗位名/公司名搜索（本地库）" />
+          <input id="createdFrom" placeholder="开始时间：2026-04-27 00:00:00" />
+          <input id="createdTo" placeholder="结束时间：2026-04-27 23:59:59" />
+          <button id="btnSearch" class="btn btn-primary">查询</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>岗位</th>
+                <th>岗位链接</th>
+                <th>公司</th>
+                <th>薪资</th>
+                <th>地点</th>
+                <th>经验/学历</th>
+                <th>采集时间</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <span id="pagerInfo" class="muted"></span>
+          <button id="btnPrev">上一页</button>
+          <button id="btnNext">下一页</button>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="/web/app.js"></script>
+</body>
+</html>
